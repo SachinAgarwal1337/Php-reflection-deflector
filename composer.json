@@ -2,7 +2,16 @@
     "name": "skagarwal/reflection",
     "description": "Test any Private/Protected Methods/Properties of any class",
     "type": "library",
-    "keywords": ["Laravel", "generators"],
+    "keywords": [
+        "PHP",
+        "Reflection",
+        "UnitTesting",
+        "Testing",
+        "Private Methods",
+        "Protected Methods",
+        "Private Properties",
+        "Protected Properties"
+    ],
     "time": "2015-05-31",
     "license": "MIT",
     "require": {
@@ -14,7 +23,7 @@
             "email": "sachinkumaragarwal05@gmail.com"
         }
     ],
-       "autoload": {
+    "autoload": {
         "psr-4": {
             "SKAgarwal\\Reflection\\": "src/"
         }
