@@ -63,7 +63,7 @@ $this->on($classObject)->get{Proerty};
 <br>
 #### call{Method}($arguments = []);
 **Description:** same as call() but dynamically calls the method. This is not Chainable Method.<br>
-{method} can be any valid public/private/protected method of reflected Class Object.
+{method} Can be any valid public/private/protected method of reflected Class Object.
 <br>
 <br>
 #### get($property);
@@ -72,4 +72,4 @@ $this->on($classObject)->get{Proerty};
 <br>
 #### get{Property};
 **Description:** same as get() but dynamically gets the value of the property. This is not Chainable Method.<br>
-{property} Can mt any valid Public/Private/Protected property of the reflected Class Object.
+{property} Can be any valid Public/Private/Protected property of the reflected Class Object.
