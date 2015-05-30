@@ -30,8 +30,8 @@ Either By using `reflect()` method like this:
 $randomClass = new RandomClass();
 $this->reflect($randomClass);
 ```
-**This Method is not chainable**
-**Note: **Its preferable to use this in `constructor` or for PhpUnit in `setUp()` method etc.
+**This Method is not chainable**<br>
+**Note:** Its preferable to use this in `constructor` or for PhpUnit in `setUp()` method etc.
 
 OR by using `on()` method like this:
 ```php
