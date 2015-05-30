@@ -5,7 +5,8 @@ use SKAgarwal\Reflection\Exceptions\MethodNotFoundException;
 use SKAgarwal\Reflection\Exceptions\ObjectNotFoundException;
 
 /**
- * For easy testing of protected methods
+ * For easy testing of provate\protected methods
+ * For easy testing of provate\protected properties
  *
  * trait ReflectableTrait
  *
