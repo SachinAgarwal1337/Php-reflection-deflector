@@ -108,13 +108,8 @@ trait ReflectableTrait
      */
     public function reflect($classObj)
     {
-        if (! $this->classObj) {
-            $this->classObj = $classObj;
-        }
-
-        if (! $this->reflection) {
-            $this->reflection = new ReflectionClass($classObj);
-        }
+        $this->classObj = $classObj;
+        $this->reflection = new ReflectionClass($classObj);
     }
 
     /**
