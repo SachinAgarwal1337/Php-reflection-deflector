@@ -1,4 +1,4 @@
-# Php-Reflection-Extended
+# Php-Reflection-Deflector
 Test your **Private/Protected** Methods/Properties with any testing package and with **Zero** configuration.
 
 # Usage
