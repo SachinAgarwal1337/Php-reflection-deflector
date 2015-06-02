@@ -196,7 +196,7 @@ trait ReflectableTrait
         if($this->is('set', $name)){
             $name = $this->extract('set', $name);
 
-            return $this->set($name, $value);
+            $this->set($name, $value);
         }
     }
 }
