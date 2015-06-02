@@ -3,6 +3,8 @@
 <br>
 Test your **Private/Protected** Methods/Properties with any testing package and with **Zero** configuration.
 
+**New:** can now set the values for private/protected properties. See the **Available Mothods** Section for details.
+
 # Usage
 ### Step 1: Install Through Composer
 ```php
@@ -64,7 +66,7 @@ $this->on($classObject)->get{Proerty};
 <br>
 <br>
 #### call{Method}($arguments = []);
-**Description:** same as call() but dynamically calls the method. This is not Chainable Method.<br>
+**Description:** Same as `call()` but dynamically calls the method. This is not Chainable Method.<br>
 {method} Can be any valid public/private/protected method of reflected Class Object.
 <br>
 <br>
@@ -73,5 +75,14 @@ $this->on($classObject)->get{Proerty};
 <br>
 <br>
 #### get{Property};
-**Description:** same as get() but dynamically gets the value of the property. This is not Chainable Method.<br>
+**Description:** Same as `get()` but dynamically gets the value of the property. This is not Chainable Method.<br>
+{property} Can be any valid Public/Private/Protected property of the reflected Class Object.
+<br>
+<br>
+#### set($name, $value);
+**Description:** Set the value of valid Public/Private/Protected property of the reflected Class Object. This is not Chainable Method.
+<br>
+<br>
+#### set{Property} = $value;
+**Description:** Same as `set()` but dynamically sets the value of the property. This is not Chainable Method.<br>
 {property} Can be any valid Public/Private/Protected property of the reflected Class Object.
