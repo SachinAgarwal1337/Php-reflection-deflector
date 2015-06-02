@@ -120,9 +120,7 @@ trait ReflectableTrait
 
         $method = $this->reflection->getMethod($method);
         $this->setAccessibleOn($method);
-        $method->invokeArgs($this->classObj, $arguments);
-
-        return $this;
+        return $method->invokeArgs($this->classObj, $arguments);
     }
 
     /**
