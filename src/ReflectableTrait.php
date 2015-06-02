@@ -36,7 +36,7 @@ trait ReflectableTrait
      */
     private function is($type, $name)
     {
-        return preg_match("/{^$type}/", $name);
+        return preg_match("/^{$type}/", $name);
     }
 
 
