@@ -1,4 +1,6 @@
 # Php-Reflection-Extended
+[![Latest Stable Version](https://poser.pugx.org/skagarwal/reflection/v/stable)](https://packagist.org/packages/skagarwal/reflection) [![Total Downloads](https://poser.pugx.org/skagarwal/reflection/downloads)](https://packagist.org/packages/skagarwal/reflection) [![Latest Unstable Version](https://poser.pugx.org/skagarwal/reflection/v/unstable)](https://packagist.org/packages/skagarwal/reflection) [![License](https://poser.pugx.org/skagarwal/reflection/license)](https://packagist.org/packages/skagarwal/reflection)
+<br>
 Test your **Private/Protected** Methods/Properties with any testing package and with **Zero** configuration.
 
 # Usage
