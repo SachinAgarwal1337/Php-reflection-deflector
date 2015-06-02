@@ -27,51 +27,30 @@ trait ReflectableTrait
     protected $classObj;
 
     /**
-     * check if the method is been called.
+     * Check if the dynamic method is called on given type.
      *
-     * @param $method
+     * @param $type
+     * @param $name
      *
      * @return int
      */
-    private function isCallMethod($method)
+    private function is($type, $name)
     {
-        return preg_match('/^call/', $method);
+        return preg_match("/{^$type}/", $name);
     }
 
+
     /**
-     * Extract the dynamic method name.
+     * Extract the dynamic name from given type
      *
-     * @param $method
+     * @param $from
+     * @param $name
      *
      * @return string
      */
-    private function extractMethodName($method)
+    private function extract($type, $name)
     {
-        return lcfirst(preg_replace('/call/', '', $method, 1));
-    }
-
-    /**
-     * Check if Property is been accessed.
-     *
-     * @param $name
-     *
-     * @return int
-     */
-    private function isGetProperty($name)
-    {
-        return preg_match('/^get/', $name);
-    }
-
-    /**
-     * Extract the dynamic property name.
-     *
-     * @param $name
-     *
-     * @return mixed
-     */
-    private function extractPropertyName($name)
-    {
-        return lcfirst(preg_replace('/get/', '', $name, 1));
+        return lcfirst(preg_replace("/{$type}/", '', $name, 1));
     }
 
     /**
@@ -162,6 +141,20 @@ trait ReflectableTrait
     }
 
     /**
+     * Set value of public/private/protected properties.
+     *
+     * @param $name
+     * @param $value
+     */
+    public function set($name, $value)
+    {
+        $property = $this->reflection->getProperty($name);
+        $this->setAccessibleOn($property);
+
+        $property->setValue($this->classObj, $value);
+    }
+
+    /**
      * @param       $method
      * @param array $arguments
      *
@@ -171,8 +164,8 @@ trait ReflectableTrait
      */
     public function __call($method, $arguments = [])
     {
-        if ($this->isCallMethod($method)) {
-            $methodName = $this->extractMethodName($method);
+        if ($this->is('call', $method)) {
+            $methodName = $this->extract('call', $method);
 
             return $this->call($methodName, $arguments);
         }
@@ -187,10 +180,23 @@ trait ReflectableTrait
      */
     public function __get($name)
     {
-        if ($this->isGetProperty($name)) {
-            $name = $this->extractPropertyName($name);
+        if ($this->is('get', $name)) {
+            $name = $this->extract('get', $name);
 
             return $this->get($name);
+        }
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        if($this->is('set', $name)){
+            $name = $this->extract('set', $name);
+
+            return $this->set($name, $value);
         }
     }
 }
