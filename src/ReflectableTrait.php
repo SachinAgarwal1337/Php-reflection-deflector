@@ -1,8 +1,7 @@
 <?php namespace SKAgarwal\Reflection;
 
 use ReflectionClass;
-use SKAgarwal\Reflection\Exceptions\MethodNotFoundException;
-use SKAgarwal\Reflection\Exceptions\ObjectNotFoundException;
+use SKAgarwal\Reflection\Exceptions\NotFoundException;
 
 /**
  * For easy testing of provate\protected methods
@@ -25,6 +24,27 @@ trait ReflectableTrait
      * @var
      */
     protected $classObj;
+
+    /**
+     * Single use reflcetion.
+     *
+     * @var ReflectionClass
+     */
+    protected $reflectionOn;
+
+    /**
+     * Single use class object.
+     *
+     * @var
+     */
+    protected $classObjOn;
+
+    /**
+     * For checking if called after the on() method.
+     *
+     * @var bool
+     */
+    private $isCalledAfterOn = false;
 
     /**
      * Check if the dynamic method is called on given type.
@@ -56,12 +76,12 @@ trait ReflectableTrait
     /**
      * $classObj and $reflection properties should be defined.
      *
-     * @throws ObjectNotFoundException
+     * @throws NotFoundException
      */
     private function checkClassObjAndReflectionProperties()
     {
         if (!$this->classObj || !$this->reflection) {
-            throw new ObjectNotFoundException("Should be called after 'on()' method.");
+            throw new NotFoundException("No class object reflected");
         }
     }
 
@@ -81,6 +101,28 @@ trait ReflectableTrait
     }
 
     /**
+     * get the Reflection and ClassObject
+     *
+     * @return array
+     */
+    private function getReflectionAndClassObject()
+    {
+        if ($this->isCalledAfterOn) {
+
+            $this->isCalledAfterOn = false;
+            $classObj = $this->classObjOn;
+            $reflection = $this->reflectionOn;
+
+            unset($this->classObjOn);
+            unset($this->reflectionOn);
+
+            return [$reflection, $classObj];
+        }
+
+        return [$this->reflection, $this->classObj];
+    }
+
+    /**
      * Getting the reflection.
      *
      * @param $classObj Object of the class the reflection to be created.
@@ -88,7 +130,7 @@ trait ReflectableTrait
     public function reflect($classObj)
     {
         $this->classObj = $classObj;
-        $this->reflection = new ReflectionClass($classObj);
+        $this->reflection = new ReflectionClass($this->classObj);
     }
 
     /**
@@ -100,7 +142,9 @@ trait ReflectableTrait
      */
     public function on($classObj)
     {
-        $this->reflect($classObj);
+        $this->classObjOn = $classObj;
+        $this->reflectionOn = new ReflectionClass($classObj);
+        $this->isCalledAfterOn = true;
 
         return $this;
     }
@@ -112,15 +156,17 @@ trait ReflectableTrait
      * @param array $arguments Arguments to be passed to the method
      *
      * @return $this
-     * @throws ObjectNotFoundException
+     * @throws NotFoundException
      */
     public function call($method, $arguments = [])
     {
         $this->checkClassObjAndReflectionProperties();
 
-        $method = $this->reflection->getMethod($method);
+        list($reflection, $classObj) = $this->getReflectionAndClassObject();
+        $method = $reflection->getMethod($method);
         $this->setAccessibleOn($method);
-        return $method->invokeArgs($this->classObj, $arguments);
+
+        return $method->invokeArgs($classObj, $arguments);
     }
 
     /**
@@ -129,13 +175,18 @@ trait ReflectableTrait
      * @param $name Property name to be accessed (Case sensitive).
      *
      * @return mixed
+     * @throws NotFoundException
      */
     public function get($name)
     {
-        $property = $this->reflection->getProperty($name);
+        $this->checkClassObjAndReflectionProperties();
+
+        list($reflection, $classObj) = $this->getReflectionAndClassObject();
+
+        $property = $reflection->getProperty($name);
         $this->setAccessibleOn($property);
 
-        return $property->getValue($this->classObj);
+        return $property->getValue($classObj);
     }
 
     /**
@@ -143,13 +194,18 @@ trait ReflectableTrait
      *
      * @param $name
      * @param $value
+     * @throws NotFoundException
      */
     public function set($name, $value)
     {
-        $property = $this->reflection->getProperty($name);
+        $this->checkClassObjAndReflectionProperties();
+
+        list($reflection, $classObj) = $this->getReflectionAndClassObject();
+
+        $property = $reflection->getProperty($name);
         $this->setAccessibleOn($property);
 
-        $property->setValue($this->classObj, $value);
+        $property->setValue($classObj, $value);
     }
 
     /**
@@ -157,8 +213,7 @@ trait ReflectableTrait
      * @param array $arguments
      *
      * @return ReflectableTrait
-     * @throws MethodNotFoundException
-     * @throws ObjectNotFoundException
+     * @throws NotFoundException
      */
     public function __call($method, $arguments = [])
     {
@@ -168,13 +223,14 @@ trait ReflectableTrait
             return $this->call($methodName, $arguments);
         }
 
-        throw new MethodNotFoundException("Method '{$method}' is not defined.");
+        throw new NotFoundException("Method '{$method}' not found.");
     }
 
     /**
      * @param $name
      *
      * @return mixed
+     * @throws NotFoundException
      */
     public function __get($name)
     {
@@ -183,18 +239,25 @@ trait ReflectableTrait
 
             return $this->get($name);
         }
+
+        throw new NotFoundException("Property '{$name}' not found.");
     }
 
     /**
      * @param $name
      * @param $value
+     *
+     * @throws NotFoundException
      */
     public function __set($name, $value)
     {
-        if($this->is('set', $name)){
+        if ($this->is('set', $name)) {
             $name = $this->extract('set', $name);
 
             $this->set($name, $value);
+        }
+        else {
+            throw new NotFoundException("Property '{$name}' not found.");
         }
     }
 }
