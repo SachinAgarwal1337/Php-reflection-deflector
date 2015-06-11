@@ -1,9 +1,9 @@
 # Php-Reflection-Deflector
-[![Latest Stable Version](https://poser.pugx.org/skagarwal/reflection/v/stable)](https://packagist.org/packages/skagarwal/reflection) [![Total Downloads](https://poser.pugx.org/skagarwal/reflection/downloads)](https://packagist.org/packages/skagarwal/reflection) [![Latest Unstable Version](https://poser.pugx.org/skagarwal/reflection/v/unstable)](https://packagist.org/packages/skagarwal/reflection) [![License](https://poser.pugx.org/skagarwal/reflection/license)](https://packagist.org/packages/skagarwal/reflection)
+[![Build Status](https://travis-ci.org/SachinAgarwal1337/Php-reflection-deflector.svg?branch=master)](https://travis-ci.org/SachinAgarwal1337/Php-reflection-deflector) [![Latest Stable Version](https://poser.pugx.org/skagarwal/reflection/v/stable)](https://packagist.org/packages/skagarwal/reflection) [![Total Downloads](https://poser.pugx.org/skagarwal/reflection/downloads)](https://packagist.org/packages/skagarwal/reflection) [![Latest Unstable Version](https://poser.pugx.org/skagarwal/reflection/v/unstable)](https://packagist.org/packages/skagarwal/reflection) [![License](https://poser.pugx.org/skagarwal/reflection/license)](https://packagist.org/packages/skagarwal/reflection)
 <br>
 Test your **Private/Protected** Methods/Properties with any testing package and with **Zero** configuration.
 
-**New:** can now set the values for private/protected properties. See the **Available Mothods** Section for details.
+**New:** Can reflect multiple classes at same time.
 
 # Usage
 ### Step 1: Install Through Composer
@@ -86,3 +86,29 @@ $this->on($classObject)->get{Proerty};
 #### set{Property} = $value;
 **Description:** Same as `set()` but dynamically sets the value of the property. This is not Chainable Method.<br>
 {property} Can be any valid Public/Private/Protected property of the reflected Class Object.
+
+-
+### Reflect Multiple classes at same time
+**Example:**
+```php
+// Considering phpunit
+
+ protected function setUp()
+  {
+    $this->foo = new Foo();
+    $this->reflect($this->foo);
+  }
+  
+
+  public function test_something()
+  {
+    $hello = $this->callSayHello(); // this will call SayHello() of class `Foo`
+    $this->assertEquals('Hello', $hello);
+
+    $hello = $this->on(new FooBar())->callSayHello(); // this will call SayHello() of class `FooBar`
+    $this->assertEquals('Hello FooBar', $hello);
+
+    $hello = $this->callSayHello(); // this will call SayHello() of class `Foo`
+    $this->assertEquals('Hello', $hello);
+  }
+```
