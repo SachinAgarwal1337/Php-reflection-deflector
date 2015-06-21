@@ -29,7 +29,7 @@ And That's it. You are all set to go. :)
 **Now you can do the following to test private/protected methods or properties:**
 
 ### Instantiate the Reflector
-Either By using `reflect()` method like this:
+By using `reflect()` method like this:
 ```php
 $randomClass = new RandomClass();
 $this->reflect($randomClass);
@@ -37,13 +37,13 @@ $this->reflect($randomClass);
 **This Method is not chainable**<br>
 **Note:** Its preferable to use this in `constructor` or for PhpUnit in `setUp()` method etc.
 
-OR by using `on()` method like this:
+By using `on()` method like this:
 ```php
 $randomClass = new RandomClass();
 $this->on($randomClass)->call($method, $args = []);
 ```
 **This method is chainable**
-**Note: **This method can also be used in place of `reflect()` method. Both do the same work.
+**Note: **This method relfects the class object only once. That is only for one call to method or property. It can be used for relfecting multiple classes at same time.
 
 # Available Methods
 #### reflect($classObj);
