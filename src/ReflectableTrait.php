@@ -80,7 +80,12 @@ trait ReflectableTrait
      */
     private function checkClassObjAndReflectionProperties()
     {
-        if (!$this->classObj || !$this->reflection) {
+        if ($this->isCalledAfterOn) {
+            if ((!$this->classObjOn || !$this->reflectionOn)) {
+                throw new NotFoundException("No class object reflected");
+            }
+        }
+        elseif ((!$this->classObj || !$this->reflection)) {
             throw new NotFoundException("No class object reflected");
         }
     }
@@ -194,6 +199,7 @@ trait ReflectableTrait
      *
      * @param $name
      * @param $value
+     *
      * @throws NotFoundException
      */
     public function set($name, $value)
@@ -255,8 +261,7 @@ trait ReflectableTrait
             $name = $this->extract('set', $name);
 
             $this->set($name, $value);
-        }
-        else {
+        } else {
             throw new NotFoundException("Property '{$name}' not found.");
         }
     }
